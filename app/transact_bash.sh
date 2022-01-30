@@ -1,0 +1,1 @@
+$ near call aaaaaa20d9e0e2461697782ef11675f668207961.factory.bridge.near ft_transfer_call{}

@@ -10,6 +10,10 @@ CRED_PATH = '/Users/gauneg/.near-credentials'
 
 const { connect, keyStores, KeyPair, transactions, WalletConnection, providers, ConnectionInfo } = nearAPI;
 
+const AURORA_DENOMINATION = 1000000000000000000
+
+const NEAR_DENOMINATION = 1000000000000000000000000
+
 const config = {
     networkId: "mainnet",
     keyStore: new keyStores.UnencryptedFileSystemKeyStore(CRED_PATH),
@@ -88,7 +92,7 @@ async function getPool(config){
 
    let amounts = decodedRes['amounts']
 
-   console.log(get_pool_token_sell_price(1000000000000000000, amounts[0]/1000000000000000000, amounts[1]/1000000000000000000000000, 0.3))
+   console.log(get_pool_token_sell_price(100, amounts[0]/AURORA_DENOMINATION, amounts[1]/NEAR_DENOMINATION, 0.3))
 
 
 }
