@@ -5,13 +5,16 @@ import * as ref_finance from "./contracts/ref_finance_utils";
 import * as wrap_near from "./contracts/wrap_near_utils";
 
 async function main() {
+  /********************************************************************************************************************/
+  /*Sample call to claim rewards from aurora validator*/
   // const response = await aurora_validator.claimRewards(
   //   constants.MAINNET_CONFIG,
   //   String(process.env.USER_ACCOUNT_ID_1)
   // );
   // console.log(response);
   /********************************************************************************************************************/
-  // // const response = await ref_finance.getPoolInfo(
+  /*Sample call to get pool info, and calculate current price for selling x num of aurora tokens on ref*/
+  // const response = await ref_finance.getPoolInfo(
   //   constants.MAINNET_CONFIG,
   //   String(process.env.USER_ACCOUNT_ID_1),
   //   1395
@@ -26,6 +29,7 @@ async function main() {
   // );
   // console.log(per_aurora_price_for_x_amount);
   /********************************************************************************************************************/
+  /*Sample call to sell aurora tokens on ref finance*/
   let amount_to_sell = 1;
   let per_token_min_price_in_near = 1.2;
   const response = await ref_finance.sellTokenTowNear(
@@ -40,6 +44,7 @@ async function main() {
   );
   console.log(response);
   /********************************************************************************************************************/
+  /*Sample call to unwrap wrapped nears*/
   // let near_amount_to_unwrap = 1 * constants.NEAR_DENOMINATION;
   // let near_amount_to_unwrap_in_str = utils.get_big_num_str_rep(
   //   near_amount_to_unwrap
