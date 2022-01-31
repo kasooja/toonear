@@ -2,6 +2,7 @@
   .ts would not allow access these methods directly. */
 
 import * as nearApi from "near-api-js";
+import * as constants from "../constants";
 import { formatNearAmount } from "near-api-js/lib/utils/format";
 
 export const claimRewards = async function claimRewards(config, accountId) {
@@ -11,7 +12,7 @@ export const claimRewards = async function claimRewards(config, accountId) {
     "claim",
     {
       account_id: accountId,
-      token_id: "aaaaaa20d9e0e2461697782ef11675f668207961.factory.bridge.near",
+      token_id: constants.AURORA_TOKEN_ADDRESS,
       farm_id: 0,
     },
     100000000000000,
@@ -23,8 +24,15 @@ export const claimRewards = async function claimRewards(config, accountId) {
     receiverId: "aurora.pool.near",
     actions: [action1],
   });
-  let decodedRes = await nearApi.providers.getTransactionLastResult(res);
-  return decodedRes;
+  let tx_log = [];
+  for (let receipt_outcome_index in res["receipts_outcome"]) {
+    let receipt_outcome = res["receipts_outcome"][receipt_outcome_index];
+    let logs = receipt_outcome["outcome"]["logs"];
+    logs.forEach(function (item, index) {
+      tx_log.push(item);
+    });
+  }
+  return tx_log;
 };
 
 export const stakeNear = async function stakeNear(
@@ -32,7 +40,6 @@ export const stakeNear = async function stakeNear(
   accountId,
   amount_to_stake
 ) {
-  console.log(amount_to_stake);
   const near = await nearApi.connect(config);
   const account = await near.account(accountId);
   const action1 = nearApi.transactions.functionCall(

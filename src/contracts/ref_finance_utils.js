@@ -1,6 +1,7 @@
 /* Temp fix: Using .js for files where a protected method e.g. signAndSendTransaction, is being used, as 
   .ts would not allow access these methods directly. */
 
+import * as constants from "../constants";
 import * as nearApi from "near-api-js";
 
 export const get_pool_token_1_sell_price = function get_pool_token_1_sell_price(
@@ -78,12 +79,25 @@ export const sellTokenTowNear = async function sellTokenTowNear(
       String(nearApi.utils.format.formatNearAmount("1"))
     )
   );
-
   let res = await account.signAndSendTransaction({
-    receiverId: "aaaaaa20d9e0e2461697782ef11675f668207961.factory.bridge.near",
+    receiverId: constants.AURORA_TOKEN_ADDRESS,
     actions: [action1],
   });
+  let tx_log = [];
+  for (let receipt_outcome_index in res["receipts_outcome"]) {
+    let receipt_outcome = res["receipts_outcome"][receipt_outcome_index];
+    let logs = receipt_outcome["outcome"]["logs"];
+    logs.forEach(function (item, index) {
+      tx_log.push(item);
+    });
+  }
+  return tx_log;
 
-  let decodedRes = await nearApi.providers.getTransactionLastResult(res);
-  return decodedRes;
+  // let res = await account.signAndSendTransaction({
+  //   receiverId: constants.AURORA_TOKEN_ADDRESS,
+  //   actions: [action1],
+  // });
+
+  // let decodedRes = await nearApi.providers.getTransactionLastResult(res);
+  // return decodedRes;
 };
