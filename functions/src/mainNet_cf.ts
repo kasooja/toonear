@@ -2,11 +2,11 @@ import * as nearApi from "near-api-js";
 import * as functions from "firebase-functions";
 import * as firebase_utils from "./utils/firebase_admin_utils";
 const { keyStores, KeyPair } = nearApi;
-import * as constants from "./lib/constants";
-import * as aurora_validator from "./lib/contracts/aurora_validator_utils";
-import * as ref_finance from "./lib//contracts/ref_finance_utils";
-import * as wrap_near from "./lib/contracts/wrap_near_utils";
-import * as utils from "./lib/utils";
+import * as constants from "./library/constants";
+import * as aurora_validator from "./library/contracts/aurora_validator_utils";
+import * as ref_finance from "./library/contracts/ref_finance_utils";
+import * as wrap_near from "./library/contracts/wrap_near_utils";
+import * as utils from "./library/utils";
 
 const get_near_config = async function get_near_keystore() {
   const keyStore = new keyStores.InMemoryKeyStore();
