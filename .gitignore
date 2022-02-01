@@ -109,3 +109,5 @@ dist
 .env
 
 package-lock.json
+
+service_account.json
