@@ -36,6 +36,7 @@ const get_near_config = async function get_near_keystore() {
 };
 
 export const autocompound = async function autocompound(admin: any) {
+  console.log("Autocompounder started");
   const near_connection = await get_near_config();
   const near_config = near_connection.mainnet_config;
   const near_account_id = near_connection.near_account_id;
@@ -126,18 +127,20 @@ export const autocompound = async function autocompound(admin: any) {
               "Actual wNear received: ",
               Number(wnear_received) / constants.NEAR_DENOMINATION
             );
+
             const unwrap_response = await wrap_near.unwrap(
               near_config,
               near_account_id,
               wnear_received
             );
-            console.log(unwrap_response);
+            console.log("unwrapped wNear");
+
             const stake_response = await aurora_validator.stakeNear(
               near_config,
               near_account_id,
               wnear_received
             );
-            console.log(stake_response);
+            console.log("staker near");
           }
         }
       }

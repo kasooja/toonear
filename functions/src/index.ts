@@ -24,7 +24,7 @@ function createCronCF(schedule: string, runtime_opts: any, task: any) {
 
 // ***************************MAINNET*************************************
 exports.autocompound_aurora_validator_staking_rewards = createCronCF(
-  "every 5 minutes",
+  "every 12 hours",
   CF_RUNTIME_OPTS_LIGHT_1,
   mainnet_cf.autocompound
 );
