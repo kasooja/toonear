@@ -7,7 +7,7 @@ import * as admin from "firebase-admin";
 admin.initializeApp();
 
 export const CF_RUNTIME_OPTS_LIGHT_1: RuntimeOptions = {
-  timeoutSeconds: 60,
+  timeoutSeconds: 120,
   memory: "128MB",
 };
 
