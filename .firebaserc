@@ -1,5 +1,6 @@
 {
   "projects": {
+    "prod": "toonear-cf7bf",
     "default": "toonear-cf7bf"
   }
 }

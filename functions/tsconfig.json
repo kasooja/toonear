@@ -12,5 +12,5 @@
     "allowSyntheticDefaultImports": true
   },
   "compileOnSave": true,
-  "include": ["src", "test", "lib"]
+  "include": ["src"]
 }
