@@ -55,49 +55,50 @@ export const autocompound = async function autocompound(admin: any) {
     parameter_data["min_per_aur_token_price_to_sell"];
   console.log("min near per token price: ", min_per_aur_token_price_to_sell);
 
-  /********************************************************************************************************************/
-  let claim_response = await aurora_validator.claimRewards(
+  const test_amt_to_sell = 5;
+  const pool_info_response = await ref_finance.getPoolInfo(
     near_config,
-    near_account_id
+    near_account_id,
+    constants.REF_FIN_AUR_NEAR_POOL_ID
   );
-  const claim_reg = "Transfer\\s*(\\d+)\\s*from\\s*aur.*to.*near";
-  let claim_match: any = claim_response.join(", ").match(claim_reg);
-  if (claim_match !== null) {
-    let aur_token: string | null = claim_match[1];
-    if (aur_token !== null) {
-      let aur_tokens_in_num = Number(aur_token);
-      console.log(
-        "Aurora tokens claimed as rewards: ",
-        aur_tokens_in_num / constants.AURORA_DENOMINATION
-      );
+  let amounts = pool_info_response["amounts"];
 
-      const pool_info_response = await ref_finance.getPoolInfo(
-        near_config,
-        near_account_id,
-        constants.REF_FIN_AUR_NEAR_POOL_ID
-      );
-      let amounts = pool_info_response["amounts"];
+  let per_aurora_price_for_x_amount = ref_finance.get_pool_token_1_sell_price(
+    test_amt_to_sell,
+    amounts[0] / constants.AURORA_DENOMINATION,
+    amounts[1] / constants.NEAR_DENOMINATION,
+    constants.REF_FIN_AUR_NEAR_POOL_FEES
+  );
+  console.log(
+    "Current aur price for trade size in terms of near on ref fin: ",
+    per_aurora_price_for_x_amount
+  );
 
-      let amount_to_sell: number =
-        (aur_tokens_sell_per * aur_tokens_in_num) /
-        constants.AURORA_DENOMINATION;
-      amount_to_sell = utils.fix_decimal(
-        amount_to_sell,
-        constants.AURORA_DENOMINATION
-      );
-      console.log("amount to sell: ", amount_to_sell);
-      let per_aurora_price_for_x_amount =
-        ref_finance.get_pool_token_1_sell_price(
-          amount_to_sell,
-          amounts[0] / constants.AURORA_DENOMINATION,
-          amounts[1] / constants.NEAR_DENOMINATION,
-          constants.REF_FIN_AUR_NEAR_POOL_FEES
+  /********************************************************************************************************************/
+  if (per_aurora_price_for_x_amount > min_per_aur_token_price_to_sell) {
+    let claim_response = await aurora_validator.claimRewards(
+      near_config,
+      near_account_id
+    );
+    const claim_reg = "Transfer\\s*(\\d+)\\s*from\\s*aur.*to.*near";
+    let claim_match: any = claim_response.join(", ").match(claim_reg);
+    if (claim_match !== null) {
+      let aur_token: string | null = claim_match[1];
+      if (aur_token !== null) {
+        let aur_tokens_in_num = Number(aur_token);
+        console.log(
+          "Aurora tokens claimed as rewards: ",
+          aur_tokens_in_num / constants.AURORA_DENOMINATION
         );
-      console.log(
-        "Current aur price for trade size in terms of near on ref fin: ",
-        per_aurora_price_for_x_amount
-      );
-      if (per_aurora_price_for_x_amount > min_per_aur_token_price_to_sell) {
+        let amount_to_sell: number =
+          (aur_tokens_sell_per * aur_tokens_in_num) /
+          constants.AURORA_DENOMINATION;
+        amount_to_sell = utils.fix_decimal(
+          amount_to_sell,
+          constants.AURORA_DENOMINATION
+        );
+        console.log("amount to sell: ", amount_to_sell);
+
         let min_nears_to_be_received =
           min_per_aur_token_price_to_sell * amount_to_sell;
         min_nears_to_be_received = utils.fix_decimal(
